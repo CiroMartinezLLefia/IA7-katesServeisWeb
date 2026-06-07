@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         String    @default("USER") // "USER" | "EDITOR" | "ADMIN"
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  comments     Comment[]
+}
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  country     String?
+  shieldUrl   String?
+  homeMatches Match[]  @relation("HomeMatches")
+  awayMatches Match[]  @relation("AwayMatches")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Match {
+  id         String    @id @default(uuid())
+  homeTeamId String
+  homeTeam   Team      @relation("HomeMatches", fields: [homeTeamId], references: [id], onDelete: Cascade)
+  awayTeamId String
+  awayTeam   Team      @relation("AwayMatches", fields: [awayTeamId], references: [id], onDelete: Cascade)
+  homeScore  Int?
+  awayScore  Int?
+  date       DateTime
+  status     String    @default("SCHEDULED") // "SCHEDULED" | "LIVE" | "FINISHED"
+  imageUrl   String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  comments   Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  matchId   String
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
