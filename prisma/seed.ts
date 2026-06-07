@@ -48,12 +48,36 @@ async function main() {
 
   // 2. Create Teams
   const teamsData = [
-    { name: "Real Madrid CF", country: "Spain", shieldUrl: "" },
-    { name: "FC Barcelona", country: "Spain", shieldUrl: "" },
-    { name: "Manchester City FC", country: "United Kingdom", shieldUrl: "" },
-    { name: "FC Bayern München", country: "Germany", shieldUrl: "" },
-    { name: "Paris Saint-Germain", country: "France", shieldUrl: "" },
-    { name: "Juventus FC", country: "Italy", shieldUrl: "" },
+    {
+      name: "Real Madrid CF",
+      country: "Spain",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+    },
+    {
+      name: "FC Barcelona",
+      country: "Spain",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_(crest).svg",
+    },
+    {
+      name: "Manchester City FC",
+      country: "United Kingdom",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+    },
+    {
+      name: "FC Bayern München",
+      country: "Germany",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_(2017).svg",
+    },
+    {
+      name: "Paris Saint-Germain",
+      country: "France",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+    },
+    {
+      name: "Juventus FC",
+      country: "Italy",
+      shieldUrl: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Juvenutus-Logo-2017.svg",
+    },
   ];
 
   const teams: Record<string, any> = {};
@@ -61,7 +85,7 @@ async function main() {
   for (const t of teamsData) {
     const createdTeam = await prisma.team.upsert({
       where: { name: t.name },
-      update: { country: t.country },
+      update: { country: t.country, shieldUrl: t.shieldUrl },
       create: {
         name: t.name,
         country: t.country,
